@@ -58,7 +58,7 @@ CellEditor.prototype.edit = function(rowIndex, columnIndex, element, value)
 
 						// candidate cell is editable: edit it and break
 						var column = this.celleditor.editablegrid.getColumn(candidateColumnIndex);
-						if (column.editable && column.datatype != 'boolean' && this.celleditor.editablegrid.isEditable(candidateRowIndex, candidateColumnIndex)) {
+						if (column.editable && column.datatype != 'boolean' && this.celleditor.editablegrid.isEditable(candidateRowIndex, candidateColumnIndex, element)) {
 							this.celleditor.editablegrid.editCell(candidateRowIndex, candidateColumnIndex);
 							break;
 						}
@@ -208,7 +208,7 @@ CellEditor.prototype.applyEditing = function(element, newValue)
 			// if the new value is different than the previous one, let the user handle the model change
 			var newValue = editablegrid.getValueAt(element.rowIndex, element.columnIndex);
 			if (!this.editablegrid.isSame(newValue, previousValue)) {
-				editablegrid.modelChanged(element.rowIndex, element.columnIndex, previousValue, newValue, editablegrid.getRow(element.rowIndex));
+				editablegrid.modelChanged(element.id, previousValue, newValue);
 			}
 
 			_clearEditor(element);	

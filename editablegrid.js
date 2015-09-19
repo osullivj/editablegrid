@@ -123,7 +123,7 @@ function EditableGrid(name, config) { if (name) this.init(name, config); }
 /**
  * Default properties
  */ 
-EditableGrid.prototype.enableSort = true;
+EditableGrid.prototype.enableSort = false;
 EditableGrid.prototype.enableStore = true;
 EditableGrid.prototype.doubleclick = false;
 EditableGrid.prototype.editmode = "absolute";
@@ -217,10 +217,10 @@ EditableGrid.prototype.chartRendered = function() {};
 EditableGrid.prototype.tableRendered = function(containerid, className, tableid) {};
 EditableGrid.prototype.tableSorted = function(columnIndex, descending) {};
 EditableGrid.prototype.tableFiltered = function() {};
-EditableGrid.prototype.modelChanged = function(rowIndex, columnIndex, oldValue, newValue, row) {};
+EditableGrid.prototype.modelChanged = function( elemId, oldValue, newValue) {};
 EditableGrid.prototype.rowSelected = function(oldRowIndex, newRowIndex) {};
 EditableGrid.prototype.isHeaderEditable = function(rowIndex, columnIndex) { return false; };
-EditableGrid.prototype.isEditable =function(rowIndex, columnIndex) { return true; };
+EditableGrid.prototype.isEditable =function(rowIndex, columnIndex, elem) { return true; };
 EditableGrid.prototype.readonlyWarning = function() {};
 /** Notifies that a row has been deleted */
 EditableGrid.prototype.rowRemoved = function(oldRowIndex, rowId) {};
@@ -775,6 +775,7 @@ EditableGrid.prototype.getTypedValue = function(columnIndex, cellValue)
 	if (cellValue === null) return cellValue;
 
 	var colType = this.getColumnType(columnIndex);
+    if (colType == 'html') return cellValue;
 	if (colType == 'boolean') cellValue = (cellValue && cellValue != 0 && cellValue != "false") ? true : false;
 	if (colType == 'integer') { cellValue = parseInt(cellValue, 10); } 
 	if (colType == 'double') { cellValue = parseFloat(cellValue); }
@@ -844,7 +845,7 @@ EditableGrid.prototype.attachToHTMLTable = function(_table, _columns)
 	for (var i = 0; i < rows.length; i++) {
 		var rowData = [];
 		var cols = rows[i].cells;
-		for (var j = 0; j < cols.length && j < this.columns.length; j++) rowData.push(this.getTypedValue(j, cols[j].innerHTML));
+		for (var j = 0; j < cols.length && j < this.columns.length; j++) rowData.push(this.getTypedValue(j, cols[j].innerText));
 		this.data.push({ visible: true, originalIndex: i, id: rows[i].id, columns: rowData });
 		rows[i].rowId = rows[i].id;
 		rows[i].id = this._getRowDOMId(rows[i].id);
@@ -1864,7 +1865,7 @@ EditableGrid.prototype.editCell = function(rowIndex, columnIndex)
 					if (column.headerEditor && isHeaderEditable(rowIndex, columnIndex))
 						column.headerEditor.edit(rowIndex, columnIndex, target, column.label);
 				}
-				else if (column.cellEditor && isEditable(rowIndex, columnIndex))
+				else if (column.cellEditor && isEditable(rowIndex, columnIndex, target))
 					column.cellEditor.edit(rowIndex, columnIndex, target, getValueAt(rowIndex, columnIndex));
 			}
 		}

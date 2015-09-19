@@ -176,7 +176,7 @@ CheckboxCellRenderer.prototype.render = function(element, value)
 
 	element.appendChild(htmlInput);
 	htmlInput.checked = value;
-	htmlInput.disabled = (!this.column.editable || !this.editablegrid.isEditable(element.rowIndex, element.columnIndex));
+	htmlInput.disabled = (!this.column.editable || !this.editablegrid.isEditable(element.rowIndex, element.columnIndex, element));
 
 	EditableGrid.prototype.addClassName(element, "boolean");
 };
