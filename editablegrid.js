@@ -219,7 +219,7 @@ EditableGrid.prototype.tableSorted = function(columnIndex, descending) {};
 EditableGrid.prototype.tableFiltered = function() {};
 EditableGrid.prototype.modelChanged = function( elemId, oldValue, newValue) {};
 EditableGrid.prototype.rowSelected = function(oldRowIndex, newRowIndex) {};
-EditableGrid.prototype.isHeaderEditable = function(rowIndex, columnIndex) { return false; };
+EditableGrid.prototype.isHeaderEditable = function(rowIndex, columnIndex) { return true; };
 EditableGrid.prototype.isEditable =function(rowIndex, columnIndex, elem) { return true; };
 EditableGrid.prototype.readonlyWarning = function() {};
 /** Notifies that a row has been deleted */
